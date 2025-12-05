@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageText = "Aqui vai a sua mensagem especial. Você pode escrever o que quiser aqui. Agradecimentos, memórias, piadas internas... O que o seu coração mandar!";
     
     const typingElement = document.getElementById('typing-text');
-    const typingSpeed = 40; // ms per character
+    const typingSpeed = 35; // ms per character
 
     let charIndex = 0;
 
