@@ -1,93 +1,61 @@
-const messages = [
-    "Olá! Esta é a primeira mensagem.",
-    "Aqui está a segunda mensagem, aparecendo como um pop-up.",
-    "Você pode personalizar estas mensagens no arquivo messages.js.",
-    "Siga o fluxo e aproveite a experiência!",
-    "Fim das mensagens por enquanto."
-];
-
-let currentMessageIndex = 0;
-const messageCard = document.getElementById('message-card');
-const messageText = document.getElementById('message-text');
-const prevBtn = document.getElementById('prev-btn');
-const nextBtn = document.getElementById('next-btn');
-const dotsContainer = document.getElementById('dots-container');
-const vignette = document.getElementById('vignette-overlay');
-
-function initDots() {
-    dotsContainer.innerHTML = '';
-    messages.forEach((_, index) => {
-        const dot = document.createElement('div');
-        dot.classList.add('dot');
-        if (index === currentMessageIndex) dot.classList.add('active');
-        dot.addEventListener('click', () => {
-            showMessage(index);
-        });
-        dotsContainer.appendChild(dot);
-    });
-}
-
-function updateDots(index) {
-    const dots = document.querySelectorAll('.dot');
-    dots.forEach((dot, i) => {
-        if (i === index) {
-            dot.classList.add('active');
-        } else {
-            dot.classList.remove('active');
-        }
-    });
-}
-
-function updateButtons(index) {
-    prevBtn.disabled = index === 0;
-    nextBtn.disabled = index === messages.length - 1;
-}
-
-function showMessage(index) {
-    if (index >= 0 && index < messages.length) {
-        currentMessageIndex = index;
-        
-        // Animate out
-        messageCard.style.opacity = '0';
-        messageCard.style.transform = 'scale(0.9) translateY(20px)';
-        
-        setTimeout(() => {
-            messageText.textContent = messages[index];
-            
-            // Animate in
-            messageCard.style.opacity = '1';
-            messageCard.style.transform = 'scale(1) translateY(0)';
-            
-            updateDots(index);
-            updateButtons(index);
-        }, 300);
-    }
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-    // Fade in vignette
-    setTimeout(() => {
-        vignette.classList.remove('vignette-active');
-    }, 100);
+    // Vignette fade out
+    const vignette = document.getElementById('vignette-overlay');
+    if (vignette) {
+        setTimeout(() => {
+            vignette.classList.remove('vignette-active');
+        }, 100);
+    }
 
-    initDots();
+    // Message Content - EDIT HERE
+    const messageText = "Aqui vai a sua mensagem especial. Você pode escrever o que quiser aqui. Agradecimentos, memórias, piadas internas... O que o seu coração mandar!";
     
-    // Show first message
-    setTimeout(() => {
-        messageText.textContent = messages[0];
-        messageCard.classList.add('active');
-        updateButtons(0);
-    }, 500);
+    const typingElement = document.getElementById('typing-text');
+    const typingSpeed = 40; // ms per character
 
-    prevBtn.addEventListener('click', () => {
-        if (currentMessageIndex > 0) {
-            showMessage(currentMessageIndex - 1);
-        }
-    });
+    let charIndex = 0;
 
-    nextBtn.addEventListener('click', () => {
-        if (currentMessageIndex < messages.length - 1) {
-            showMessage(currentMessageIndex + 1);
+    function typeWriter() {
+        if (charIndex < messageText.length) {
+            // Handle line breaks if you use \n in the string, though innerHTML handles <br> better.
+            // For simple text:
+            typingElement.textContent += messageText.charAt(charIndex);
+            charIndex++;
+            setTimeout(typeWriter, typingSpeed);
+        } else {
+            // Message complete
+            // Trigger confetti if available
+            if (typeof startConfetti === 'function') {
+                // Configure confetti for a nice burst
+                const duration = 3000;
+                const end = Date.now() + duration;
+
+                (function frame() {
+                    // launch a few confetti from the left edge
+                    confetti({
+                        particleCount: 7,
+                        angle: 60,
+                        spread: 55,
+                        origin: { x: 0 }
+                    });
+                    // and launch a few from the right edge
+                    confetti({
+                        particleCount: 7,
+                        angle: 120,
+                        spread: 55,
+                        origin: { x: 1 }
+                    });
+
+                    if (Date.now() < end) {
+                        requestAnimationFrame(frame);
+                    }
+                }());
+            }
         }
-    });
+    }
+
+    // Start typing after a small delay to allow transition to finish
+    if (typingElement) {
+        setTimeout(typeWriter, 1000);
+    }
 });

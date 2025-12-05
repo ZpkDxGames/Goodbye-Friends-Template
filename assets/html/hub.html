@@ -42,9 +42,9 @@
                     <div class="card-icon-wrapper">
                         <img src="../media/icons/chat.svg" alt="Messages" class="card-icon">
                     </div>
-                    <div class="card-title">Mensagens</div>
+                    <div class="card-title">Mensagem Especial</div>
                     <div class="card-desc">
-                        Algumas palavras especiais para você.
+                        Uma mensagem especial para você, com carinho.
                     </div>
                 </div>
 
@@ -159,17 +159,7 @@
 
     <!-- Scripts -->
     <script src="../js/utils/storage.js"></script>
-    <script src="../js/config.js"></script>
     <script src="../js/animations/fireworks.js"></script>
     <script src="../js/main.js"></script>
-    <script>
-        // Apply Config
-        if (typeof TEACHER_CONFIG !== 'undefined') {
-            const titleEl = document.getElementById('ai-card-title');
-            const descEl = document.getElementById('ai-card-desc');
-            if (titleEl) titleEl.textContent = TEACHER_CONFIG.hub.title;
-            if (descEl) descEl.textContent = TEACHER_CONFIG.hub.description;
-        }
-    </script>
 </body>
 </html>
